@@ -1,10 +1,9 @@
 package jp.co.axa.apidemo.entities;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +16,7 @@ import javax.validation.constraints.NotNull;
 @Table(name="EMPLOYEE")
 @Getter
 @Setter
+@Builder
 public class Employee {
 
     @Id

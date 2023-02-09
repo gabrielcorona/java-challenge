@@ -69,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         @CacheEvict(value="employee",allEntries = true)
     })
     public Employee updateEmployee(Employee employee, Long employeeId) {
-        Employee employeeResult = new Employee();
+        Employee employeeResult = Employee.builder().build();
         if(employeeId != employee.getId() && employee.getId()!= null)
             throw new BadRequestException("The IDs does not match: "+employeeId+" != "+employee.getId());
         Employee existing = getEmployee(employeeId);
