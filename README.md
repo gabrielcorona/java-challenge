@@ -1,3 +1,8 @@
+### Controller Modifications
+- Moved the logic found in the controller to the service implementation, changed the id existency validation exist by id and log instead of system out.
+- Modified the controller to return the resulted employee in the case of POST and PUT, as well in the case of POST we now require the employee data in the request body.
+- Removed unnecesary setters due to the autowiring.
+----------------------------------------------------
 ### How to use this spring-boot project
 
 - Install packages with `mvn package`

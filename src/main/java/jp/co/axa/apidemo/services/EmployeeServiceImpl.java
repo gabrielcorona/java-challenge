@@ -2,21 +2,19 @@ package jp.co.axa.apidemo.services;
 
 import jp.co.axa.apidemo.entities.Employee;
 import jp.co.axa.apidemo.repositories.EmployeeRepository;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
     private EmployeeRepository employeeRepository;
-
-    public void setEmployeeRepository(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
 
     public List<Employee> retrieveEmployees() {
         List<Employee> employees = employeeRepository.findAll();
@@ -28,15 +26,31 @@ public class EmployeeServiceImpl implements EmployeeService{
         return optEmp.get();
     }
 
-    public void saveEmployee(Employee employee){
-        employeeRepository.save(employee);
+    public Employee saveEmployee(Employee employee){
+        return employeeRepository.save(employee);
     }
 
     public void deleteEmployee(Long employeeId){
+        // walidate if the employee to be deleted exist
+        if(!employeeRepository.existsById(employeeId)){
+            // will need to throw exception
+            log.error("The employee doesn't exist");
+            return;
+        }
         employeeRepository.deleteById(employeeId);
+        log.debug("Employee Deleted Successfully with ID:"+employeeId);
     }
 
-    public void updateEmployee(Employee employee) {
-        employeeRepository.save(employee);
+    public Employee updateEmployee(Employee employee, Long employeeId) {
+        Employee employeeResult = new Employee();
+        // walidate if the employee to be updated exist
+        if(!employeeRepository.existsById(employeeId)){
+            // will need to throw exception
+            log.error("The employee doesn't exist");
+        }else{
+            employeeResult=employeeRepository.save(employee);
+            log.debug("Employee Saved Successfully with ID:"+employeeResult.getId());
+        }
+        return employeeResult;
     }
 }
