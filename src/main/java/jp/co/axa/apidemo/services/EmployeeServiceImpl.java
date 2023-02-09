@@ -1,6 +1,7 @@
 package jp.co.axa.apidemo.services;
 
 import jp.co.axa.apidemo.entities.Employee;
+import jp.co.axa.apidemo.exception.BadRequestException;
 import jp.co.axa.apidemo.repositories.EmployeeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -28,6 +30,13 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Cacheable("employee")
     public Employee getEmployee(Long employeeId) {
         Optional<Employee> optEmp = employeeRepository.findById(employeeId);
+        // walidate if the employee to be updated exist
+        if(optEmp.isEmpty()){
+            // throw exception to interrupt the process and return the message as the response in a custom message
+            log.error("The employee doesn't exist");
+            throw new NoSuchElementException("The employee with the id "+employeeId+" doesn't exist");
+            
+        }
         return optEmp.get();
     }
 
@@ -36,8 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService{
         @CacheEvict(value="employee",allEntries = true)
     })
     public Employee saveEmployee(Employee employee){
-        // will need to handle the exception if something goes wrong.
-        return employeeRepository.save(employee);
+        // if there is exception will be catch by the CustomControllerAdvice
+        return  employeeRepository.save(employee);
     }
 
     @Caching(evict = {
@@ -61,11 +70,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     })
     public Employee updateEmployee(Employee employee, Long employeeId) {
         Employee employeeResult = new Employee();
-        // walidate if the employee to be updated exist
-        if(!employeeRepository.existsById(employeeId)){
-            // will need to throw exception
-            log.error("The employee doesn't exist");
-        }
+        if(employeeId != employee.getId() && employee.getId()!= null)
+            throw new BadRequestException("The IDs does not match: "+employeeId+" != "+employee.getId());
         Employee existing = getEmployee(employeeId);
         existing.setName(employee.getName());
         existing.setDepartment(employee.getDepartment());

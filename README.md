@@ -1,3 +1,5 @@
+### Exception Handling Advice
+- The exceptions have been implemented, as well a custom controller advice has been added to catch the exceptions to provide a more standard message as a response in the endpoint.
 ### Adjustments in Logic
 - The logic has been modified to validate employee existance, as well the employee entity has been modified to handle better the currency and the getters and setters were moved to be implemented to all the properties and null values will not be allowed.
 
