@@ -1,3 +1,6 @@
+### Adjustments in Logic
+- The logic has been modified to validate employee existance, as well the employee entity has been modified to handle better the currency and the getters and setters were moved to be implemented to all the properties and null values will not be allowed.
+
 ### Adding Caching
 - The respective annotations have been added to the corresponding methods to allow caching and remove the caching when an element has been affected.
 

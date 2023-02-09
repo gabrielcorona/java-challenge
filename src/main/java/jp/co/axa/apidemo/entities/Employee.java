@@ -1,7 +1,10 @@
 package jp.co.axa.apidemo.entities;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,26 +15,23 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="EMPLOYEE")
+@Getter
+@Setter
 public class Employee {
 
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
-    @Setter
+    @NonNull
     @Column(name="EMPLOYEE_NAME")
     private String name;
 
-    @Getter
-    @Setter
+    @NonNull
     @Column(name="EMPLOYEE_SALARY")
-    private Integer salary;
+    private BigDecimal salary;
 
-    @Getter
-    @Setter
+    @NonNull
     @Column(name="DEPARTMENT")
     private String department;
 

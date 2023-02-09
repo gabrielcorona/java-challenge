@@ -20,6 +20,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Cacheable("employees")
     public List<Employee> retrieveEmployees() {
+        // this will need to add pagination and filtering
         List<Employee> employees = employeeRepository.findAll();
         return employees;
     }
@@ -35,6 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         @CacheEvict(value="employee",allEntries = true)
     })
     public Employee saveEmployee(Employee employee){
+        // will need to handle the exception if something goes wrong.
         return employeeRepository.save(employee);
     }
 
@@ -47,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         if(!employeeRepository.existsById(employeeId)){
             // will need to throw exception
             log.error("The employee doesn't exist");
-            return;
+            getEmployee(employeeId);
         }
         employeeRepository.deleteById(employeeId);
         log.debug("Employee Deleted Successfully with ID:"+employeeId);
@@ -63,10 +65,14 @@ public class EmployeeServiceImpl implements EmployeeService{
         if(!employeeRepository.existsById(employeeId)){
             // will need to throw exception
             log.error("The employee doesn't exist");
-        }else{
-            employeeResult=employeeRepository.save(employee);
-            log.debug("Employee Saved Successfully with ID:"+employeeResult.getId());
         }
+        Employee existing = getEmployee(employeeId);
+        existing.setName(employee.getName());
+        existing.setDepartment(employee.getDepartment());
+        existing.setSalary(employee.getSalary());
+        employeeResult=employeeRepository.save(existing);
+        log.debug("Employee Saved Successfully with ID:"+employeeResult.getId());
+        
         return employeeResult;
     }
 }
