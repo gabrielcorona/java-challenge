@@ -1,3 +1,6 @@
+### Adding Caching
+- The respective annotations have been added to the corresponding methods to allow caching and remove the caching when an element has been affected.
+
 ### Controller Modifications
 - Moved the logic found in the controller to the service implementation, changed the id existency validation exist by id and log instead of system out.
 - Modified the controller to return the resulted employee in the case of POST and PUT, as well in the case of POST we now require the employee data in the request body.
